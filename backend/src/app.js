@@ -1,6 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import userRouter from './routes/user.route.js'
+import videoRoute from './routes/video.routes.js'
 const app = express()
 
 app.use(cors({
@@ -9,7 +11,7 @@ app.use(cors({
 }))
 
 
-const PORT = 4000;
+
 
 app.use(express.json({limit:"20mb"}))
 
@@ -21,10 +23,19 @@ app.use(express.static('public'))
 app.use(cookieParser())
 
 
-app.listen(PORT, (req, res)=>{
-    console.log(`app is listen on ${PORT}`)
-    console.log("hello dheeraj")
-})
+app.use((req, res, next) => {
+  console.log("🌍 REQUEST:", req.method, req.url);
+  next();
+});
+
+//user route
+app.use('/api/v1/user', userRouter)
+
+//video route
+app.use('/api/v1/video',videoRoute )
+
+
+
 
 app.get('/', (req, res)=>{
     res.status(200).json({message:"hello dheeraj"})
